@@ -6,5 +6,8 @@
     <string name="action_settings">Settings</string>
     <string name="add_recipe">Add Recipe</string>
     <string name="title_activity_add_recipe">AddRecipeActivity</string>
+    <string name="add_recipe_name">Recipe Name</string>
+    <string name="add_recipe_header_recipe">Details</string>
+    <string name="add_recipe_steps">Steps</string>
 
 </resources>
