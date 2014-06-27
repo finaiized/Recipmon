@@ -4,5 +4,7 @@
     <string name="app_name">Recipmon</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="add_recipe">Add Recipe</string>
+    <string name="title_activity_add_recipe">AddRecipeActivity</string>
 
 </resources>
