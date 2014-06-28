@@ -77,11 +77,12 @@ public class MainActivity extends Activity {
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
+            /* Uncomment to load sample data for the first run
             try {
                 Recipe.writePreferences(getActivity(), Recipe.loadSampleData());
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             // Read it back
             try {

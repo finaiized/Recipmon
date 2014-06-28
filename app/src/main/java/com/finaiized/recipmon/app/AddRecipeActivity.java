@@ -9,6 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddRecipeActivity extends Activity {
@@ -43,6 +48,14 @@ public class AddRecipeActivity extends Activity {
             case R.id.action_settings:
                 return true;
             case R.id.add_recipe_done:
+                try {
+                    List<Recipe> recipes = Recipe.readPreferencesAsList(this);
+                    String recipeName = ((EditText) findViewById(R.id.editTextRecipe)).getText().toString();
+                    recipes.add(new Recipe(recipeName, "", ""));
+                    Recipe.writePreferences(this, recipes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 startActivity(new Intent(this, MainActivity.class));
         }
         return super.onOptionsItemSelected(item);
