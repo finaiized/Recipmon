@@ -1,5 +1,6 @@
 package com.finaiized.recipmon.app;
 
+import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
@@ -16,10 +17,22 @@ public class Recipe {
     public String description;
     public String image;
 
+    public static String bundleName = "name";
+    public static String bundleDescription = "description";
+    public static String bundleImage = "image";
+
     public Recipe(String n, String d, String i) {
         name = n;
         description = d;
         image = i;
+    }
+
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        b.putString(bundleName, name);
+        b.putString(bundleDescription, description);
+        b.putString(bundleImage, image);
+        return b;
     }
 
     public static List<String> filterRecipeDataByName(List<Recipe> recipes) {
@@ -97,6 +110,15 @@ public class Recipe {
         reader.endObject();
 
         return new Recipe(name, description, image);
+    }
+
+    public static Recipe findRecipeByName(List<Recipe> recipes, String name) {
+        for (Recipe r : recipes) {
+            if (r.name == name) {
+                return r;
+            }
+        }
+        return null;
     }
 }
 

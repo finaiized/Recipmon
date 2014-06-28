@@ -11,5 +11,6 @@
     <string name="add_recipe_steps">Steps</string>
     <string name="preference_key_file">com.finaiized.recipmon.PREFERENCES</string>
     <string name="preference_key_recipe">com.finaiized.recipmon.PREFERENCES.recipes</string>
+    <string name="title_activity_recipe_view">RecipeViewActivity</string>
 
 </resources>
