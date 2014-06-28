@@ -3,6 +3,7 @@ package com.finaiized.recipmon.app;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,8 +74,26 @@ public class MainActivity extends Activity {
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
-            // Mock data
-            recipeDataSourceList.add("Sprinkle Cupcakes");
+            SharedPreferences sp = getActivity().getSharedPreferences(
+                    getString(R.string.preference_key_recipe), MODE_PRIVATE);
+
+            // Write data
+            SharedPreferences.Editor editor = sp.edit();
+            try {
+                editor.putString(getString(R.string.preference_key_recipe), Recipe.loadSampleData());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            editor.commit();
+
+            // Read it back
+            try {
+                String json = sp.getString(getString(R.string.preference_key_recipe), "");
+                recipeDataSourceList.addAll(Recipe.filterRecipeDataByName(
+                        Recipe.readJsonRecipeStream(json)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             ListView listView = (ListView) getActivity().findViewById(R.id.recipeList);
             listView.setAdapter(new ArrayAdapter<String>(getActivity(),

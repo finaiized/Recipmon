@@ -22,7 +22,7 @@ public class AddRecipeActivity extends Activity {
                     .add(R.id.container_add_recipe, new AddActivityFragment())
                     .commit();
             getActionBar().setDisplayHomeAsUpEnabled(true);
-            getActionBar().setTitle("Add Recipe");
+            getActionBar().setTitle(R.string.add_recipe);
         }
     }
 
