@@ -77,22 +77,15 @@ public class MainActivity extends Activity {
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
-            SharedPreferences sp = getActivity().getSharedPreferences(
-                    getString(R.string.preference_key_recipe), MODE_PRIVATE);
-
-            // Write data
-            SharedPreferences.Editor editor = sp.edit();
             try {
-                editor.putString(getString(R.string.preference_key_recipe), Recipe.loadSampleData());
+                Recipe.writePreferences(getActivity(), Recipe.loadSampleData());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            editor.commit();
 
             // Read it back
             try {
-                String json = sp.getString(getString(R.string.preference_key_recipe), "");
-                recipeDataSourceList.addAll(Recipe.readJsonRecipeStream(json));
+                recipeDataSourceList.addAll(Recipe.readPreferencesAsList(getActivity()));
             } catch (IOException e) {
                 e.printStackTrace();
             }

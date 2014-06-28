@@ -1,5 +1,7 @@
 package com.finaiized.recipmon.app;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.JsonToken;
@@ -9,6 +11,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Recipe {
@@ -27,12 +30,37 @@ public class Recipe {
         image = i;
     }
 
-    public Bundle toBundle() {
-        Bundle b = new Bundle();
-        b.putString(bundleName, name);
-        b.putString(bundleDescription, description);
-        b.putString(bundleImage, image);
-        return b;
+
+    public static void writePreferences(Activity a, List<Recipe> recipes) throws IOException {
+
+        writePreferences(a, createJsonRecipeStream(recipes));
+
+    }
+
+    public static void writePreferences(Activity a, String recipes) throws IOException {
+
+        SharedPreferences sp = a.getSharedPreferences(
+                a.getString(R.string.preference_key_recipe), a.MODE_PRIVATE);
+
+        // Write data
+        SharedPreferences.Editor editor = sp.edit();
+
+        editor.putString(a.getString(R.string.preference_key_recipe), recipes);
+
+        editor.apply();
+    }
+
+    public static String readPreferencesAsJson(Activity a) {
+        SharedPreferences sp = a.getSharedPreferences(
+                a.getString(R.string.preference_key_recipe), a.MODE_PRIVATE);
+
+        String json = sp.getString(a.getString(R.string.preference_key_recipe), "");
+
+        return json;
+    }
+
+    public static List<Recipe> readPreferencesAsList(Activity a) throws IOException {
+        return readJsonRecipeStream(readPreferencesAsJson(a));
     }
 
     public static List<String> filterRecipeDataByName(List<Recipe> recipes) {
@@ -43,29 +71,33 @@ public class Recipe {
         return names;
     }
 
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        b.putString(bundleName, name);
+        b.putString(bundleDescription, description);
+        b.putString(bundleImage, image);
+        return b;
+    }
+
     public static String loadSampleData() throws IOException {
+        Recipe r1 = new Recipe("Sprinkle Cupcakes", "", null);
+        Recipe r2 = new Recipe("Chocolate Pie", "", null);
+        List<Recipe> recipes = Arrays.asList(r1, r2);
+        return createJsonRecipeStream(recipes);
+    }
+
+    public static String createJsonRecipeStream(List<Recipe> recipes) throws IOException {
         StringWriter sw = new StringWriter();
         JsonWriter writer = new JsonWriter(sw);
         writer.beginArray();
 
-        addRecipe("Sprinkle Cupcakes", null, "", writer);
-        addRecipe("Chocolate Pie", null, "", writer);
+        for (Recipe r : recipes) {
+            addRecipe(r.name, r.description, r.image, writer);
+        }
 
         writer.endArray();
         writer.flush();
         return sw.toString();
-    }
-
-    public static void addRecipe(String name, String image, String description, JsonWriter writer) throws IOException {
-        writer.beginObject();
-        writer.name("name").value(name);
-        if (image == null) {
-            writer.name("image").nullValue();
-        } else {
-            writer.name("image").value(description);
-        }
-        writer.name("description").value(description);
-        writer.endObject();
     }
 
     public static List<Recipe> readJsonRecipeStream(String s) throws IOException {
@@ -77,6 +109,20 @@ public class Recipe {
             reader.close();
         }
     }
+    
+    private static void addRecipe(String name, String description, String image, JsonWriter writer) throws IOException {
+        writer.beginObject();
+        writer.name("name").value(name);
+        if (image == null) {
+            writer.name("image").nullValue();
+        } else {
+            writer.name("image").value(description);
+        }
+        writer.name("description").value(description);
+        writer.endObject();
+    }
+
+
 
     private static List<Recipe> readRecipesArray(JsonReader reader) throws IOException {
         List<Recipe> recipes = new ArrayList<Recipe>();
@@ -114,7 +160,7 @@ public class Recipe {
 
     public static Recipe findRecipeByName(List<Recipe> recipes, String name) {
         for (Recipe r : recipes) {
-            if (r.name == name) {
+            if (r.name.equals(name)) {
                 return r;
             }
         }
