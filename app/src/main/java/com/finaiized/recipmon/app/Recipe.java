@@ -79,6 +79,20 @@ public class Recipe {
         return b;
     }
 
+    /**
+     * Checks if the given recipe is considered complete (all necessary fields given)
+     *
+     * @param r The recipe to check
+     * @return "" if there is no error; otherwise, the reason for the error
+     */
+    public static String verifyRecipeData(Recipe r) {
+        if (r.name.equals("")) {
+            return "The recipe must have a name.";
+        }
+
+        return "";
+    }
+
     public static String loadSampleData() throws IOException {
         Recipe r1 = new Recipe("Sprinkle Cupcakes", "A treat for the youth among us!", null);
         Recipe r2 = new Recipe("Chocolate Pie", "Stupendous amounts of chocolate wrapping the classic pie.", null);
@@ -112,7 +126,7 @@ public class Recipe {
     
     private static void addRecipe(String name, String description, String image, JsonWriter writer) throws IOException {
         writer.beginObject();
-        writer.name("name").value(name);
+        writer.name("name").value(name.trim());
         writer.name("description").value(description);
         if (image == null) {
             writer.name("image").nullValue();
