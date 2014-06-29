@@ -62,12 +62,15 @@ public class RecipeViewActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_recipe_view, container, false);
-            TextView tv = ((TextView) rootView.findViewById(R.id.recipe_name_label));
+            View name = inflater.inflate(R.layout.fragment_recipe_view, container, false);
+            TextView tv = ((TextView) name.findViewById(R.id.recipe_name_label));
             tv.setText(currentRecipe.name);
 
+            TextView description = ((TextView) name.findViewById(R.id.recipe_description_label));
+            description.setText(currentRecipe.description);
+
             getActivity().getActionBar().setTitle(currentRecipe.name);
-            return rootView;
+            return name;
         }
     }
 }

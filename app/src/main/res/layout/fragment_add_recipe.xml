@@ -9,23 +9,40 @@
         style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_recipe_header_recipe"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
+        android:text="@string/add_recipe_header_recipe"
+        android:textColor="#000000"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editTextRecipe"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:hint="@string/add_recipe_name" />
+        android:layout_marginLeft="5dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/editTextRecipeName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/add_recipe_name" />
+
+        <EditText
+            android:id="@+id/editTextRecipeDescription"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/add_recipe_description" />
+
+
+    </LinearLayout>
 
     <TextView
         style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_recipe_steps"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
+        android:text="@string/add_recipe_steps" />
 
 </LinearLayout>

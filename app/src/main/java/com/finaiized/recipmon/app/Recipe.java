@@ -80,8 +80,8 @@ public class Recipe {
     }
 
     public static String loadSampleData() throws IOException {
-        Recipe r1 = new Recipe("Sprinkle Cupcakes", "", null);
-        Recipe r2 = new Recipe("Chocolate Pie", "", null);
+        Recipe r1 = new Recipe("Sprinkle Cupcakes", "A treat for the youth among us!", null);
+        Recipe r2 = new Recipe("Chocolate Pie", "Stupendous amounts of chocolate wrapping the classic pie.", null);
         List<Recipe> recipes = Arrays.asList(r1, r2);
         return createJsonRecipeStream(recipes);
     }
@@ -113,12 +113,12 @@ public class Recipe {
     private static void addRecipe(String name, String description, String image, JsonWriter writer) throws IOException {
         writer.beginObject();
         writer.name("name").value(name);
+        writer.name("description").value(description);
         if (image == null) {
             writer.name("image").nullValue();
         } else {
             writer.name("image").value(description);
         }
-        writer.name("description").value(description);
         writer.endObject();
     }
 
@@ -145,9 +145,9 @@ public class Recipe {
             String key = reader.nextName();
             if (key.equals("name")) {
                 name = reader.nextString();
-            } else if (name.equals("description")) {
+            } else if (key.equals("description")) {
                 description = reader.nextString();
-            } else if (name.equals("image") && reader.peek() != JsonToken.NULL) {
+            } else if (key.equals("image") && reader.peek() != JsonToken.NULL) {
                 image = reader.nextString();
             } else {
                 reader.skipValue();

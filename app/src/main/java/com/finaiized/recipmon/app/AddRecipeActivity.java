@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -50,8 +49,9 @@ public class AddRecipeActivity extends Activity {
             case R.id.add_recipe_done:
                 try {
                     List<Recipe> recipes = Recipe.readPreferencesAsList(this);
-                    String recipeName = ((EditText) findViewById(R.id.editTextRecipe)).getText().toString();
-                    recipes.add(new Recipe(recipeName, "", ""));
+                    String recipeName = ((EditText) findViewById(R.id.editTextRecipeName)).getText().toString();
+                    String recipeDescription = ((EditText) findViewById(R.id.editTextRecipeDescription)).getText().toString();
+                    recipes.add(new Recipe(recipeName, recipeDescription, ""));
                     Recipe.writePreferences(this, recipes);
                 } catch (IOException e) {
                     e.printStackTrace();
