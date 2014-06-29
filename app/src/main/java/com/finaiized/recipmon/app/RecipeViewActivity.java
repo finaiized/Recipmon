@@ -32,7 +32,7 @@ public class RecipeViewActivity extends Activity {
         setContentView(R.layout.activity_recipe_view);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new RecipeViewFragment())
+                    .add(R.id.container_recipe, new RecipeViewFragment())
                     .commit();
         }
 
@@ -59,7 +59,7 @@ public class RecipeViewActivity extends Activity {
             case R.id.action_delete:
                 AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
                 deleteDialog.setMessage(R.string.delete_message);
-                deleteDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                deleteDialog.setPositiveButton(R.string.delete_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {

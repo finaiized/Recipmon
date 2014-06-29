@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.add_recipe:
                 startActivity(new Intent(this, AddRecipeActivity.class));
@@ -58,7 +59,7 @@ public class MainActivity extends Activity {
 
 
     public static class MainActivityFragment extends Fragment {
-        private List<Recipe> recipeDataSourceList = new ArrayList<Recipe>();
+
         public static final String RECIPE_NAME_PRESSED = "com.finaiized.recipmon.MainActivity" +
                 ".MainActivityFragment.RECIPE_NAME_PRESSED";
 
@@ -74,15 +75,16 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
+        public void onResume() {
+            super.onResume();
             /* Uncomment to load sample data for the first run
             try {
                 Recipe.writePreferences(getActivity(), Recipe.loadSampleData());
             } catch (IOException e) {
                 e.printStackTrace();
             }*/
+
+            final List<Recipe> recipeDataSourceList = new ArrayList<Recipe>();
 
             // Read it back
             try {

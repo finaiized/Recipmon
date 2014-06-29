@@ -8,22 +8,30 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.finaiized.recipmon.app.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name">
-        <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.finaiized.recipmon.app.AddRecipeActivity"
+            android:name=".AddRecipeActivity"
             android:label="@string/title_activity_add_recipe"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name="com.finaiized.recipmon.app.RecipeViewActivity"
+            android:name=".RecipeViewActivity"
             android:label="@string/title_activity_recipe_view"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="SettingsActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.finaiized.recipmon.app.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

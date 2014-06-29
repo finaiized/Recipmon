@@ -123,7 +123,7 @@ public class Recipe {
             reader.close();
         }
     }
-    
+
     private static void addRecipe(String name, String description, String image, JsonWriter writer) throws IOException {
         writer.beginObject();
         writer.name("name").value(name.trim());
@@ -135,7 +135,6 @@ public class Recipe {
         }
         writer.endObject();
     }
-
 
 
     private static List<Recipe> readRecipesArray(JsonReader reader) throws IOException {

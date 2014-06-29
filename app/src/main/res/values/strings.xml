@@ -15,9 +15,14 @@
     <string name="add_recipe_description">Recipe description</string>
     <string name="action_delete">Delete recipe</string>
     <string name="delete_message">This recipe will be removed from your device.</string>
-    <string name="ok">Delete</string>
+    <string name="delete_ok">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="add_recipe_confirmation">Recipe added.</string>
     <string name="delete_recipe_confirmation">Recipe deleted.</string>
+    <string name="reset_ok">Reset</string>
+    <string name="reset_message">Reset recipe data?</string>
+    <string name="reset_data_confirmation">Recipe data reset.</string>
+    <string name="pref_key_reset_sample_data">pref_key_reset_sample_data_button</string>
+    <string name="preference_reset_sample_data">Reset to sample data</string>
 
 </resources>
