@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -66,6 +67,7 @@ public class RecipeViewActivity extends Activity {
                             Recipe r = Recipe.findRecipeByName(recipes, currentRecipe.name);
                             recipes.remove(r);
                             Recipe.writePreferences(RecipeViewActivity.this, recipes);
+                            Toast.makeText(RecipeViewActivity.this, R.string.delete_recipe_confirmation, Toast.LENGTH_SHORT).show();
 
                             startActivity(new Intent(RecipeViewActivity.this, MainActivity.class));
                         } catch (IOException e) {

@@ -17,5 +17,7 @@
     <string name="delete_message">This recipe will be removed from your device.</string>
     <string name="ok">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="add_recipe_confirmation">Recipe added.</string>
+    <string name="delete_recipe_confirmation">Recipe deleted.</string>
 
 </resources>

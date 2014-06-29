@@ -64,6 +64,8 @@ public class AddRecipeActivity extends Activity {
                     recipes.add(newRecipe);
                     Recipe.writePreferences(this, recipes);
 
+                    Toast.makeText(this, R.string.add_recipe_confirmation, Toast.LENGTH_SHORT).show();
+
                     startActivity(new Intent(this, MainActivity.class));
                 } catch (IOException e) {
                     e.printStackTrace();
