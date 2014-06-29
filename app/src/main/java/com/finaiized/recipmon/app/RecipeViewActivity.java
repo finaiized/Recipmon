@@ -54,8 +54,6 @@ public class RecipeViewActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
             case R.id.action_delete:
                 AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
                 deleteDialog.setMessage(R.string.delete_message);
