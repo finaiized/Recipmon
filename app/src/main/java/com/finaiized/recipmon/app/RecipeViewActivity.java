@@ -1,7 +1,9 @@
 package com.finaiized.recipmon.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.util.List;
 
 
 public class RecipeViewActivity extends Activity {
@@ -47,9 +52,36 @@ public class RecipeViewActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_delete:
+                AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
+                deleteDialog.setMessage(R.string.delete_message);
+                deleteDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            List<Recipe> recipes = Recipe.readPreferencesAsList(RecipeViewActivity.this);
+                            Recipe r = Recipe.findRecipeByName(recipes, currentRecipe.name);
+                            recipes.remove(r);
+                            Recipe.writePreferences(RecipeViewActivity.this, recipes);
+
+                            startActivity(new Intent(RecipeViewActivity.this, MainActivity.class));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                deleteDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                deleteDialog.create();
+                deleteDialog.show();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

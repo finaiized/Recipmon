@@ -13,5 +13,9 @@
     <string name="preference_key_recipe">com.finaiized.recipmon.PREFERENCES.recipes</string>
     <string name="title_activity_recipe_view">RecipeViewActivity</string>
     <string name="add_recipe_description">Recipe description</string>
+    <string name="action_delete">Delete recipe</string>
+    <string name="delete_message">This recipe will be removed from your device.</string>
+    <string name="ok">Delete</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
