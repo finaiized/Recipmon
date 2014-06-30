@@ -27,8 +27,9 @@ import java.util.List;
 
 
 public class AddRecipeActivity extends Activity {
-    private static Bitmap loadedImage = null;
-    private static String photoLocation = null;
+    private static Bitmap loadedImage;
+    private static String photoLocation;
+    private static String prevPhotoLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,17 @@ public class AddRecipeActivity extends Activity {
                     .commit();
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setTitle(R.string.add_recipe);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Release last image captured and saved by the camera
+        if (prevPhotoLocation != null) {
+            File f = new File(prevPhotoLocation);
+            f.delete();
         }
     }
 
@@ -119,6 +131,13 @@ public class AddRecipeActivity extends Activity {
             super.onActivityResult(requestCode, resultCode, data);
 
             if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+                // Remove previous data
+                loadedImage = null;
+                if (prevPhotoLocation != null) {
+                    File f = new File(prevPhotoLocation);
+                    f.delete();
+                }
+
                 // Image from the gallery
                 if (data != null) {
                     // Show - but don't save a copy of - the selected image
@@ -135,6 +154,7 @@ public class AddRecipeActivity extends Activity {
                     ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
                     Bitmap bmp = BitmapFactory.decodeFile(photoLocation);
                     iv.setImageBitmap(bmp);
+                    prevPhotoLocation = photoLocation;
                 }
             }
         }
