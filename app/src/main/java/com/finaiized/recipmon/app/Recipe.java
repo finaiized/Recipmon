@@ -17,13 +17,12 @@ import java.util.List;
 
 public class Recipe {
 
-    public String name;
-    public String description;
-    public String image;
-
     public static String bundleName = "name";
     public static String bundleDescription = "description";
     public static String bundleImage = "image";
+    public String name;
+    public String description;
+    public String image;
 
     public Recipe(String n, String d, String i) {
         name = n;
@@ -68,14 +67,6 @@ public class Recipe {
             names.add(r.name);
         }
         return names;
-    }
-
-    public Bundle toBundle() {
-        Bundle b = new Bundle();
-        b.putString(bundleName, name);
-        b.putString(bundleDescription, description);
-        b.putString(bundleImage, image);
-        return b;
     }
 
     /**
@@ -135,7 +126,6 @@ public class Recipe {
         writer.endObject();
     }
 
-
     private static List<Recipe> readRecipesArray(JsonReader reader) throws IOException {
         List<Recipe> recipes = new ArrayList<Recipe>();
         reader.beginArray();
@@ -177,6 +167,14 @@ public class Recipe {
             }
         }
         return null;
+    }
+
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        b.putString(bundleName, name);
+        b.putString(bundleDescription, description);
+        b.putString(bundleImage, image);
+        return b;
     }
 }
 
