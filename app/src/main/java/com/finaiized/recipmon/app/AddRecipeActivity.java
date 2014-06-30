@@ -27,8 +27,8 @@ import java.util.List;
 
 
 public class AddRecipeActivity extends Activity {
-    static Bitmap loadedImage = null;
-    static String photoLocation = null;
+    private static Bitmap loadedImage = null;
+    private static String photoLocation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class AddRecipeActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private File createLocalImageFile() throws IOException {
+    private File createLocalImageFile() {
         // From http://developer.android.com/training/camera/photobasics.html
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -113,7 +113,6 @@ public class AddRecipeActivity extends Activity {
 
     public static class AddActivityFragment extends Fragment implements View.OnClickListener {
         static final int PICK_IMAGE_REQUEST = 1;
-        static final int TAKE_IMAGE_REQUEST = 2;
 
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -147,8 +146,6 @@ public class AddRecipeActivity extends Activity {
             View view = inflater.inflate(R.layout.fragment_add_recipe, container, false);
             Button addImageButton = (Button) view.findViewById(R.id.add_image_button);
             addImageButton.setOnClickListener(this);
-            Button takePictureButton = (Button) view.findViewById(R.id.take_picture_button);
-            takePictureButton.setOnClickListener(this);
             return view;
         }
 
@@ -163,13 +160,9 @@ public class AddRecipeActivity extends Activity {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                         File photo;
-                        try {
-                            photo = ((AddRecipeActivity) getActivity()).createLocalImageFile();
-                            if (photo != null) {
-                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        photo = ((AddRecipeActivity) getActivity()).createLocalImageFile();
+                        if (photo != null) {
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                         }
                     }
 

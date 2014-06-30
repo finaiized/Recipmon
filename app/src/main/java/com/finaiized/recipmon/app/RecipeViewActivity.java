@@ -22,7 +22,7 @@ import java.util.List;
 
 
 public class RecipeViewActivity extends Activity {
-    public static Recipe currentRecipe;
+    private static Recipe currentRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class RecipeViewActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class RecipeViewFragment extends Fragment {
+    private static class RecipeViewFragment extends Fragment {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,

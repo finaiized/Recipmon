@@ -9,6 +9,7 @@
         android:id="@+id/add_recipe_image_view"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
+        android:contentDescription="@string/recipe_image_description"
         android:scaleType="centerCrop"
         android:src="@drawable/pink_cupcake" />
 
