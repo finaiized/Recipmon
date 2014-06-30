@@ -44,12 +44,27 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/add_image_button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="@string/add_recipe_add_image" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/add_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/add_recipe_add_image" />
+
+        <Button
+            android:id="@+id/take_picture_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/take_picture" />
+
+    </LinearLayout>
 
 
     <TextView

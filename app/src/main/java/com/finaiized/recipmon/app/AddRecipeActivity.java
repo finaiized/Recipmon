@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,6 +28,7 @@ import java.util.List;
 
 public class AddRecipeActivity extends Activity {
     static Bitmap loadedImage = null;
+    static String photoLocation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,9 @@ public class AddRecipeActivity extends Activity {
                     String recipeName = ((EditText) findViewById(R.id.editTextRecipeName)).getText().toString();
                     String recipeDescription = ((EditText) findViewById(R.id.editTextRecipeDescription)).getText().toString();
                     String recipeImagePath = saveSelectedImage();
+                    if (saveSelectedImage() == null) {
+                        recipeImagePath = photoLocation;
+                    }
 
                     Recipe newRecipe = new Recipe(recipeName, recipeDescription, recipeImagePath);
                     String status = Recipe.verifyRecipeData(newRecipe);
@@ -88,8 +93,9 @@ public class AddRecipeActivity extends Activity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(null);
-
-        return new File(storageDir, imageFileName + ".jpg");
+        File file = new File(storageDir, imageFileName + ".jpg");
+        photoLocation = file.getAbsolutePath();
+        return file;
     }
 
     private String saveSelectedImage() throws IOException {
@@ -107,6 +113,7 @@ public class AddRecipeActivity extends Activity {
 
     public static class AddActivityFragment extends Fragment implements View.OnClickListener {
         static final int PICK_IMAGE_REQUEST = 1;
+        static final int TAKE_IMAGE_REQUEST = 2;
 
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -122,6 +129,10 @@ public class AddRecipeActivity extends Activity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else if (requestCode == TAKE_IMAGE_REQUEST && resultCode == RESULT_OK) {
+                ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
+                Bitmap bmp = BitmapFactory.decodeFile(photoLocation);
+                iv.setImageBitmap(bmp);
             }
         }
 
@@ -130,8 +141,10 @@ public class AddRecipeActivity extends Activity {
                                  Bundle savedInstanceState) {
 
             View view = inflater.inflate(R.layout.fragment_add_recipe, container, false);
-            Button b = (Button) view.findViewById(R.id.add_image_button);
-            b.setOnClickListener(this);
+            Button addImageButton = (Button) view.findViewById(R.id.add_image_button);
+            addImageButton.setOnClickListener(this);
+            Button takePictureButton = (Button) view.findViewById(R.id.take_picture_button);
+            takePictureButton.setOnClickListener(this);
             return view;
         }
 
@@ -143,6 +156,23 @@ public class AddRecipeActivity extends Activity {
                     imagePicker.setType("image/*");
                     imagePicker.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(Intent.createChooser(imagePicker, getActivity().getString(R.string.choose_image)), PICK_IMAGE_REQUEST);
+                    break;
+                case R.id.take_picture_button:
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePicture.resolveActivity(getActivity().getPackageManager()) != null) {
+                        File photo = null;
+
+                        try {
+                            photo = ((AddRecipeActivity) getActivity()).createLocalImageFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (photo != null) {
+                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+                            startActivityForResult(takePicture, TAKE_IMAGE_REQUEST);
+                        }
+                    }
                     break;
             }
         }
