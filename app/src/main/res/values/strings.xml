@@ -26,6 +26,5 @@
     <string name="preference_reset_sample_data">Reset to sample data</string>
     <string name="add_recipe_add_image">Add Image</string>
     <string name="choose_image">Choose image</string>
-    <string name="take_picture">Take picture</string>
 
 </resources>

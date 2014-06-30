@@ -120,19 +120,23 @@ public class AddRecipeActivity extends Activity {
             super.onActivityResult(requestCode, resultCode, data);
 
             if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
-                // Show - but don't save - the selected image
-                Uri img = data.getData();
-                try {
-                    loadedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), img);
+                // Image from the gallery
+                if (data != null) {
+                    // Show - but don't save a copy of - the selected image
+                    Uri img = data.getData();
+                    try {
+                        loadedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), img);
+                        ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
+                        iv.setImageBitmap(loadedImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                } else { // Image from camera
                     ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
-                    iv.setImageBitmap(loadedImage);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    Bitmap bmp = BitmapFactory.decodeFile(photoLocation);
+                    iv.setImageBitmap(bmp);
                 }
-            } else if (requestCode == TAKE_IMAGE_REQUEST && resultCode == RESULT_OK) {
-                ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
-                Bitmap bmp = BitmapFactory.decodeFile(photoLocation);
-                iv.setImageBitmap(bmp);
             }
         }
 
@@ -152,27 +156,27 @@ public class AddRecipeActivity extends Activity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.add_image_button:
-                    Intent imagePicker = new Intent();
-                    imagePicker.setType("image/*");
-                    imagePicker.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(imagePicker, getActivity().getString(R.string.choose_image)), PICK_IMAGE_REQUEST);
-                    break;
-                case R.id.take_picture_button:
-                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePicture.resolveActivity(getActivity().getPackageManager()) != null) {
-                        File photo = null;
+                    Intent pickImageIntent = new Intent();
+                    pickImageIntent.setType("image/*");
+                    pickImageIntent.setAction(Intent.ACTION_GET_CONTENT);
 
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        File photo;
                         try {
                             photo = ((AddRecipeActivity) getActivity()).createLocalImageFile();
+                            if (photo != null) {
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
-                        if (photo != null) {
-                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                            startActivityForResult(takePicture, TAKE_IMAGE_REQUEST);
-                        }
                     }
+
+                    Intent chooser = Intent.createChooser(pickImageIntent, getString(R.string.choose_image));
+                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePictureIntent});
+
+                    startActivityForResult(chooser, PICK_IMAGE_REQUEST);
                     break;
             }
         }
