@@ -24,5 +24,7 @@
     <string name="reset_data_confirmation">Recipe data reset.</string>
     <string name="pref_key_reset_sample_data">pref_key_reset_sample_data_button</string>
     <string name="preference_reset_sample_data">Reset to sample data</string>
+    <string name="add_recipe_add_image">Add Image</string>
+    <string name="choose_image">Choose image</string>
 
 </resources>

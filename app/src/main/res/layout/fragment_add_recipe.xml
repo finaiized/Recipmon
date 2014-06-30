@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/add_recipe_image_view"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pink_cupcake" />
+
     <TextView
         style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="match_parent"
@@ -36,6 +43,14 @@
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/add_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="@string/add_recipe_add_image" />
+
 
     <TextView
         style="?android:attr/listSeparatorTextViewStyle"

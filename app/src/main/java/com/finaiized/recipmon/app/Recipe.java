@@ -1,6 +1,7 @@
 package com.finaiized.recipmon.app;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.JsonReader;
@@ -40,7 +41,7 @@ public class Recipe {
     public static void writePreferences(Activity a, String recipes) throws IOException {
 
         SharedPreferences sp = a.getSharedPreferences(
-                a.getString(R.string.preference_key_recipe), a.MODE_PRIVATE);
+                a.getString(R.string.preference_key_recipe), Context.MODE_PRIVATE);
 
         // Write data
         SharedPreferences.Editor editor = sp.edit();
@@ -52,11 +53,9 @@ public class Recipe {
 
     public static String readPreferencesAsJson(Activity a) {
         SharedPreferences sp = a.getSharedPreferences(
-                a.getString(R.string.preference_key_recipe), a.MODE_PRIVATE);
+                a.getString(R.string.preference_key_recipe), Context.MODE_PRIVATE);
 
-        String json = sp.getString(a.getString(R.string.preference_key_recipe), "");
-
-        return json;
+        return sp.getString(a.getString(R.string.preference_key_recipe), "");
     }
 
     public static List<Recipe> readPreferencesAsList(Activity a) throws IOException {
@@ -131,7 +130,7 @@ public class Recipe {
         if (image == null) {
             writer.name("image").nullValue();
         } else {
-            writer.name("image").value(description);
+            writer.name("image").value(image);
         }
         writer.endObject();
     }

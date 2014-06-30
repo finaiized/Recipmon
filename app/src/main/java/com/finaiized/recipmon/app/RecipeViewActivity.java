@@ -3,17 +3,22 @@ package com.finaiized.recipmon.app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -63,6 +68,10 @@ public class RecipeViewActivity extends Activity {
                         try {
                             List<Recipe> recipes = Recipe.readPreferencesAsList(RecipeViewActivity.this);
                             Recipe r = Recipe.findRecipeByName(recipes, currentRecipe.name);
+                            if (r.image != null) {
+                                File f = new File(r.image);
+                                f.delete();
+                            }
                             recipes.remove(r);
                             Recipe.writePreferences(RecipeViewActivity.this, recipes);
                             Toast.makeText(RecipeViewActivity.this, R.string.delete_recipe_confirmation, Toast.LENGTH_SHORT).show();
@@ -101,6 +110,11 @@ public class RecipeViewActivity extends Activity {
 
             TextView description = ((TextView) name.findViewById(R.id.recipe_description_label));
             description.setText(currentRecipe.description);
+
+            if (currentRecipe.image != null) {
+                ImageView image = ((ImageView) name.findViewById(R.id.recipe_view_image));
+                image.setImageBitmap(BitmapFactory.decodeFile(currentRecipe.image));
+            }
 
             getActivity().getActionBar().setTitle(currentRecipe.name);
             return name;
