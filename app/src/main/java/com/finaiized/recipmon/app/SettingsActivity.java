@@ -9,6 +9,7 @@ import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.List;
 
 public class SettingsActivity extends Activity {
 
@@ -43,6 +44,10 @@ public class SettingsActivity extends Activity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             try {
+                                List<Recipe> recipes = Recipe.readPreferencesAsList(getActivity());
+                                for (Recipe r : recipes) {
+                                    Recipe.removeRecipeData(r, recipes);
+                                }
                                 Recipe.writePreferences(getActivity(), Recipe.loadSampleData());
                                 Toast.makeText(getActivity(), R.string.reset_data_confirmation, Toast.LENGTH_SHORT).show();
                             } catch (IOException e) {

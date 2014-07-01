@@ -8,6 +8,7 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -17,12 +18,12 @@ import java.util.List;
 
 public class Recipe {
 
-    public static String bundleName = "name";
-    public static String bundleDescription = "description";
-    public static String bundleImage = "image";
-    public String name;
-    public String description;
-    public String image;
+    public static final String bundleName = "name";
+    public static final String bundleDescription = "description";
+    public static final String bundleImage = "image";
+    public final String name;
+    public final String description;
+    public final String image;
 
     public Recipe(String n, String d, String i) {
         name = n;
@@ -37,7 +38,7 @@ public class Recipe {
 
     }
 
-    public static void writePreferences(Activity a, String recipes) throws IOException {
+    public static void writePreferences(Activity a, String recipes) {
 
         SharedPreferences sp = a.getSharedPreferences(
                 a.getString(R.string.preference_key_recipe), Context.MODE_PRIVATE);
@@ -50,7 +51,7 @@ public class Recipe {
         editor.apply();
     }
 
-    public static String readPreferencesAsJson(Activity a) {
+    private static String readPreferencesAsJson(Activity a) {
         SharedPreferences sp = a.getSharedPreferences(
                 a.getString(R.string.preference_key_recipe), Context.MODE_PRIVATE);
 
@@ -67,6 +68,13 @@ public class Recipe {
             names.add(r.name);
         }
         return names;
+    }
+
+    public static void removeRecipeData(Recipe r, List<Recipe> recipes) {
+        if (r.image != null) {
+            File f = new File(r.image);
+            f.delete();
+        }
     }
 
     /**
@@ -90,7 +98,7 @@ public class Recipe {
         return createJsonRecipeStream(recipes);
     }
 
-    public static String createJsonRecipeStream(List<Recipe> recipes) throws IOException {
+    private static String createJsonRecipeStream(List<Recipe> recipes) throws IOException {
         StringWriter sw = new StringWriter();
         JsonWriter writer = new JsonWriter(sw);
         writer.beginArray();
@@ -104,7 +112,7 @@ public class Recipe {
         return sw.toString();
     }
 
-    public static List<Recipe> readJsonRecipeStream(String s) throws IOException {
+    private static List<Recipe> readJsonRecipeStream(String s) throws IOException {
         JsonReader reader = new JsonReader(new StringReader(s));
 
         try {

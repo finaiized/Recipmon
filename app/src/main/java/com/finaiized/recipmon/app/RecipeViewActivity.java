@@ -22,7 +22,7 @@ import java.util.List;
 
 
 public class RecipeViewActivity extends Activity {
-    public static Recipe currentRecipe;
+    private static Recipe currentRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +66,7 @@ public class RecipeViewActivity extends Activity {
                         try {
                             List<Recipe> recipes = Recipe.readPreferencesAsList(RecipeViewActivity.this);
                             Recipe r = Recipe.findRecipeByName(recipes, currentRecipe.name);
-                            if (r.image != null) {
-                                File f = new File(r.image);
-                                f.delete();
-                            }
+                            Recipe.removeRecipeData(r, recipes);
                             recipes.remove(r);
                             Recipe.writePreferences(RecipeViewActivity.this, recipes);
                             Toast.makeText(RecipeViewActivity.this, R.string.delete_recipe_confirmation, Toast.LENGTH_SHORT).show();
@@ -96,7 +93,7 @@ public class RecipeViewActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class RecipeViewFragment extends Fragment {
+    private static class RecipeViewFragment extends Fragment {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
