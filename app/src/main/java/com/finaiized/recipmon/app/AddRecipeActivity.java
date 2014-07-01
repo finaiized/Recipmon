@@ -42,6 +42,11 @@ public class AddRecipeActivity extends Activity {
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setTitle(R.string.add_recipe);
         }
+
+        // Reset every time a new activity is created
+        loadedImage = null;
+        photoLocation = null;
+        prevPhotoLocation = null;
     }
 
     @Override

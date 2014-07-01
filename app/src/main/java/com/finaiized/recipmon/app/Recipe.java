@@ -8,6 +8,7 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -67,6 +68,13 @@ public class Recipe {
             names.add(r.name);
         }
         return names;
+    }
+
+    public static void removeRecipeData(Recipe r, List<Recipe> recipes) {
+        if (r.image != null) {
+            File f = new File(r.image);
+            f.delete();
+        }
     }
 
     /**

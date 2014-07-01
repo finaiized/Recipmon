@@ -66,10 +66,7 @@ public class RecipeViewActivity extends Activity {
                         try {
                             List<Recipe> recipes = Recipe.readPreferencesAsList(RecipeViewActivity.this);
                             Recipe r = Recipe.findRecipeByName(recipes, currentRecipe.name);
-                            if (r.image != null) {
-                                File f = new File(r.image);
-                                f.delete();
-                            }
+                            Recipe.removeRecipeData(r, recipes);
                             recipes.remove(r);
                             Recipe.writePreferences(RecipeViewActivity.this, recipes);
                             Toast.makeText(RecipeViewActivity.this, R.string.delete_recipe_confirmation, Toast.LENGTH_SHORT).show();
