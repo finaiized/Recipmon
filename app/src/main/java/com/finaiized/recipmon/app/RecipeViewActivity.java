@@ -22,6 +22,8 @@ import java.util.List;
 
 
 public class RecipeViewActivity extends Activity {
+    public static final String RECIPE_EDIT = "com.finaiized.recipmon.RecipeViewActivity" +
+            "RECIPE_EDIT";
     private static Recipe currentRecipe;
 
     @Override
@@ -86,6 +88,12 @@ public class RecipeViewActivity extends Activity {
                 deleteDialog.create();
                 deleteDialog.show();
                 return true;
+
+            case R.id.action_edit:
+                Intent i = new Intent(this, AddRecipeActivity.class);
+                i.putExtra(RECIPE_EDIT, currentRecipe.toBundle());
+                startActivity(i);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -99,6 +107,7 @@ public class RecipeViewActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View name = inflater.inflate(R.layout.fragment_recipe_view, container, false);
+
             TextView tv = ((TextView) name.findViewById(R.id.recipe_view_name));
             tv.setText(currentRecipe.name);
             tv.setSelected(true); // enables ellipsize: marquee

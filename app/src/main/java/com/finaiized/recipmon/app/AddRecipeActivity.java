@@ -30,6 +30,9 @@ public class AddRecipeActivity extends Activity {
     private static Bitmap loadedImage;
     private static String photoLocation;
     private static String prevPhotoLocation;
+    private static Recipe currentRecipe;
+    private Boolean editing = false;
+    private String editPhotoLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,15 @@ public class AddRecipeActivity extends Activity {
                     .commit();
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setTitle(R.string.add_recipe);
+        }
+
+        Intent i = getIntent();
+        Bundle b = i.getBundleExtra(RecipeViewActivity.RECIPE_EDIT);
+        if (b != null) {
+            currentRecipe = new Recipe(b.getString(Recipe.bundleName),
+                    b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage));
+            editing = true;
+            editPhotoLocation = currentRecipe.image;
         }
 
         // Reset every time a new activity is created
@@ -79,10 +91,21 @@ public class AddRecipeActivity extends Activity {
                     List<Recipe> recipes = Recipe.readPreferencesAsList(this);
                     String recipeName = ((EditText) findViewById(R.id.editTextRecipeName)).getText().toString();
                     String recipeDescription = ((EditText) findViewById(R.id.editTextRecipeDescription)).getText().toString();
-                    String recipeImagePath = saveSelectedImage();
-                    if (saveSelectedImage() == null) {
-                        recipeImagePath = photoLocation;
+
+                    String recipeImagePath;
+                    if (photoLocation != null || loadedImage != null) {
+                        recipeImagePath = saveSelectedImage();
+                        if (recipeImagePath == null) {
+                            recipeImagePath = photoLocation;
+                        }
+                        if (editing && editPhotoLocation != null) {
+                            File f = new File(editPhotoLocation);
+                            f.delete();
+                        }
+                    } else {
+                        recipeImagePath = editPhotoLocation;
                     }
+
 
                     Recipe newRecipe = new Recipe(recipeName, recipeDescription, recipeImagePath);
                     String status = Recipe.verifyRecipeData(newRecipe);
@@ -91,7 +114,12 @@ public class AddRecipeActivity extends Activity {
                         return false;
                     }
 
-                    recipes.add(newRecipe);
+                    if (!editing) {
+                        recipes.add(newRecipe);
+                    } else {
+                        Recipe r = Recipe.findRecipeByName(recipes, currentRecipe.name);
+                        recipes.set(recipes.indexOf(r), newRecipe);
+                    }
                     Recipe.writePreferences(this, recipes);
 
                     Toast.makeText(this, R.string.add_recipe_confirmation, Toast.LENGTH_SHORT).show();
@@ -171,6 +199,15 @@ public class AddRecipeActivity extends Activity {
             View view = inflater.inflate(R.layout.fragment_add_recipe, container, false);
             Button addImageButton = (Button) view.findViewById(R.id.add_image_button);
             addImageButton.setOnClickListener(this);
+
+            if (currentRecipe != null) {
+                EditText name = (EditText) view.findViewById(R.id.editTextRecipeName);
+                name.setText(currentRecipe.name);
+                EditText description = (EditText) view.findViewById(R.id.editTextRecipeDescription);
+                description.setText(currentRecipe.description);
+                ImageView iv = (ImageView) view.findViewById(R.id.add_recipe_image_view);
+                iv.setImageBitmap(BitmapFactory.decodeFile(currentRecipe.image));
+            }
             return view;
         }
 
