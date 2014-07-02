@@ -3,5 +3,5 @@
     android:id="@+id/container_add_recipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.finaiized.recipmon.app.AddRecipeActivity"
+    tools:context="com.finaiized.recipmon.app.EditRecipeActivity"
     tools:ignore="MergeRootFrame" />

@@ -21,9 +21,9 @@ public class Recipe {
     public static final String bundleName = "name";
     public static final String bundleDescription = "description";
     public static final String bundleImage = "image";
-    public final String name;
-    public final String description;
-    public final String image;
+    public String name;
+    public String description;
+    public String image;
 
     public Recipe(String n, String d, String i) {
         name = n;

@@ -50,7 +50,8 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.add_recipe:
-                startActivity(new Intent(this, AddRecipeActivity.class));
+                startActivity(new Intent(this, EditRecipeActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

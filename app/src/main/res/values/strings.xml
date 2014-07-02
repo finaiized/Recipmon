@@ -28,5 +28,6 @@
     <string name="choose_image">Choose image</string>
     <string name="recipe_image_description">Recipe image</string>
     <string name="action_edit">Edit Recipe</string>
+    <string name="edit_recipe_confirmation">Recipe edited</string>
 
 </resources>

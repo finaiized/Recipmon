@@ -16,14 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 
 public class RecipeViewActivity extends Activity {
-    public static final String RECIPE_EDIT = "com.finaiized.recipmon.RecipeViewActivity" +
-            "RECIPE_EDIT";
+    public static final String RECIPE_EDIT = "com.finaiized.recipmon.RecipeViewActivity.RECIPE_EDIT";
     private static Recipe currentRecipe;
 
     @Override
@@ -34,7 +32,7 @@ public class RecipeViewActivity extends Activity {
         currentRecipe = new Recipe(b.getString(Recipe.bundleName),
                 b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage));
 
-        setContentView(R.layout.activity_recipe_view);
+        setContentView(R.layout.activity_recipe_edit);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container_recipe, new RecipeViewFragment())
@@ -90,7 +88,7 @@ public class RecipeViewActivity extends Activity {
                 return true;
 
             case R.id.action_edit:
-                Intent i = new Intent(this, AddRecipeActivity.class);
+                Intent i = new Intent(this, EditRecipeActivity.class);
                 i.putExtra(RECIPE_EDIT, currentRecipe.toBundle());
                 startActivity(i);
                 return true;
@@ -115,8 +113,9 @@ public class RecipeViewActivity extends Activity {
             TextView description = ((TextView) name.findViewById(R.id.recipe_description_label));
             description.setText(currentRecipe.description);
 
+            ImageView image = ((ImageView) name.findViewById(R.id.recipe_view_image));
+            image.setImageResource(R.drawable.pink_cupcake);
             if (currentRecipe.image != null) {
-                ImageView image = ((ImageView) name.findViewById(R.id.recipe_view_image));
                 image.setImageBitmap(BitmapFactory.decodeFile(currentRecipe.image));
             }
 
