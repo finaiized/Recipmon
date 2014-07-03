@@ -24,15 +24,15 @@ public class RecipeViewActivity extends Activity {
     public static final String RECIPE_EDIT = "com.finaiized.recipmon.RecipeViewActivity.RECIPE_EDIT";
     private static Recipe currentRecipe;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         Bundle b = i.getBundleExtra(MainActivity.MainActivityFragment.RECIPE_NAME_PRESSED);
-        currentRecipe = new Recipe(b.getString(Recipe.bundleName),
-                b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage),
-                b.getString(Recipe.bundleId));
-
+        if (b != null) {
+            currentRecipe = Recipe.fromBundle(b);
+        }
         setContentView(R.layout.activity_recipe_edit);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -100,11 +100,13 @@ public class RecipeViewActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    private static class RecipeViewFragment extends Fragment {
+    public static class RecipeViewFragment extends Fragment {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            super.onCreateView(inflater, container, savedInstanceState);
+
             View name = inflater.inflate(R.layout.fragment_recipe_view, container, false);
 
             TextView tv = ((TextView) name.findViewById(R.id.recipe_view_name));
@@ -122,6 +124,7 @@ public class RecipeViewActivity extends Activity {
 
             getActivity().getActionBar().setTitle(currentRecipe.name);
             return name;
+
         }
     }
 }

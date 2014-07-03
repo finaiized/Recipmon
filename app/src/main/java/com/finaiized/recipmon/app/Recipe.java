@@ -197,6 +197,13 @@ public class Recipe {
         return b;
     }
 
+    public static Recipe fromBundle(Bundle b) {
+        return new Recipe(b.getString(Recipe.bundleName),
+                b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage),
+                b.getString(Recipe.bundleId));
+
+    }
+
     @Override
     public String toString() {
         return this.name;

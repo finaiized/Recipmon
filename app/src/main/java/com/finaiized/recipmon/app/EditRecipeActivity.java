@@ -54,9 +54,7 @@ public class EditRecipeActivity extends Activity {
         // Determine if the recipe is being edited or being created
         Bundle b = getIntent().getBundleExtra(RecipeViewActivity.RECIPE_EDIT);
         if (b != null) {
-            editedRecipe = new Recipe(b.getString(Recipe.bundleName),
-                    b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage),
-                    b.getString(Recipe.bundleId));
+            editedRecipe = Recipe.fromBundle(b);
             isEditing = true;
             editedPhotoUri = editedRecipe.image;
             getActionBar().setTitle(editedRecipe.name);
