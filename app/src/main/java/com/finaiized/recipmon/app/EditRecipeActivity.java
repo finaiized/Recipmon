@@ -132,10 +132,15 @@ public class EditRecipeActivity extends Activity {
                     if (!isEditing) {
                         recipes.add(newRecipe);
                         Toast.makeText(this, R.string.add_recipe_confirmation, Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(this, MainActivity.class));
                     } else {
                         Recipe r = Recipe.findRecipeByName(recipes, editedRecipe.name);
                         recipes.set(recipes.indexOf(r), newRecipe);
                         Toast.makeText(this, R.string.edit_recipe_confirmation, Toast.LENGTH_SHORT).show();
+
+                        Intent i = new Intent(this, RecipeViewActivity.class);
+                        i.putExtra(MainActivity.MainActivityFragment.RECIPE_NAME_PRESSED, newRecipe.toBundle());
+                        startActivity(i);
                     }
 
                     Recipe.writePreferences(this, recipes);
@@ -143,7 +148,6 @@ public class EditRecipeActivity extends Activity {
                     e.printStackTrace();
                 }
 
-                startActivity(new Intent(this, MainActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
