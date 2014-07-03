@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -239,7 +240,7 @@ public class EditRecipeActivity extends Activity {
                                  Bundle savedInstanceState) {
 
             View view = inflater.inflate(R.layout.fragment_edit_recipe, container, false);
-            Button addImageButton = (Button) view.findViewById(R.id.add_image_button);
+            ImageButton addImageButton = (ImageButton) view.findViewById(R.id.add_image_button);
             addImageButton.setOnClickListener(this);
 
             // Default image
