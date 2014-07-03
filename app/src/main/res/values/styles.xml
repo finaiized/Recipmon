@@ -3,10 +3,21 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:actionOverflowButtonStyle">@style/Overflow</item>
+        <item name="android:homeAsUpIndicator">@drawable/action_bar_back</item>
     </style>
 
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/main</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:displayOptions">showHome</item>
+        <item name="android:icon">@android:color/transparent</item>
+    </style>
+
+    <!-- Overflow styles -->
+    <style name="Overflow" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
     </style>
 </resources>
