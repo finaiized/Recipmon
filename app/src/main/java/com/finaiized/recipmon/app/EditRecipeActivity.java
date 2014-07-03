@@ -240,7 +240,7 @@ public class EditRecipeActivity extends Activity {
                                  Bundle savedInstanceState) {
 
             View view = inflater.inflate(R.layout.fragment_edit_recipe, container, false);
-            ImageButton addImageButton = (ImageButton) view.findViewById(R.id.add_image_button);
+            Button addImageButton = (Button) view.findViewById(R.id.add_image_button);
             addImageButton.setOnClickListener(this);
 
             // Default image
