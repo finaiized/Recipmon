@@ -88,19 +88,15 @@ public class MainActivity extends Activity {
             }
 
             ListView listView = (ListView) getActivity().findViewById(R.id.recipeList);
-            listView.setAdapter(new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1, Recipe.filterRecipeDataByName(recipeDataSourceList)));
+            listView.setAdapter(new ArrayAdapter<Recipe>(getActivity(),
+                    android.R.layout.simple_list_item_1, recipeDataSourceList));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String title = (String) adapterView.getItemAtPosition(i);
-                    Recipe recipe = Recipe.findRecipeByName(recipeDataSourceList, title);
-
-                    if (recipe != null) {
-                        Intent intent = new Intent(getActivity(), RecipeViewActivity.class);
-                        intent.putExtra(RECIPE_NAME_PRESSED, recipe.toBundle());
-                        startActivity(intent);
-                    }
+                    Recipe recipe = (Recipe) adapterView.getItemAtPosition(i);
+                    Intent intent = new Intent(getActivity(), RecipeViewActivity.class);
+                    intent.putExtra(RECIPE_NAME_PRESSED, recipe.toBundle());
+                    startActivity(intent);
                 }
             });
         }

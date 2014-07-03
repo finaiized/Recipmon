@@ -30,7 +30,8 @@ public class RecipeViewActivity extends Activity {
         Intent i = getIntent();
         Bundle b = i.getBundleExtra(MainActivity.MainActivityFragment.RECIPE_NAME_PRESSED);
         currentRecipe = new Recipe(b.getString(Recipe.bundleName),
-                b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage));
+                b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage),
+                b.getString(Recipe.bundleId));
 
         setContentView(R.layout.activity_recipe_edit);
         if (savedInstanceState == null) {
@@ -65,7 +66,7 @@ public class RecipeViewActivity extends Activity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
                             List<Recipe> recipes = Recipe.readPreferencesAsList(RecipeViewActivity.this);
-                            Recipe r = Recipe.findRecipeByName(recipes, currentRecipe.name);
+                            Recipe r = Recipe.findRecipeById(recipes, currentRecipe.uid);
                             Recipe.removeRecipeData(r, recipes);
                             recipes.remove(r);
                             Recipe.writePreferences(RecipeViewActivity.this, recipes);

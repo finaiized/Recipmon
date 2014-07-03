@@ -55,7 +55,8 @@ public class EditRecipeActivity extends Activity {
         Bundle b = getIntent().getBundleExtra(RecipeViewActivity.RECIPE_EDIT);
         if (b != null) {
             editedRecipe = new Recipe(b.getString(Recipe.bundleName),
-                    b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage));
+                    b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage),
+                    b.getString(Recipe.bundleId));
             isEditing = true;
             editedPhotoUri = editedRecipe.image;
             getActionBar().setTitle(editedRecipe.name);
@@ -98,8 +99,9 @@ public class EditRecipeActivity extends Activity {
             case R.id.add_recipe_done:
                 String recipeName = ((EditText) findViewById(R.id.editTextRecipeName)).getText().toString();
                 String recipeDescription = ((EditText) findViewById(R.id.editTextRecipeDescription)).getText().toString();
+                String uid = editedRecipe != null ? editedRecipe.uid : null;
 
-                Recipe newRecipe = new Recipe(recipeName, recipeDescription, null);
+                Recipe newRecipe = new Recipe(recipeName, recipeDescription, null, uid);
 
                 String status = Recipe.verifyRecipeData(newRecipe);
                 if (!status.equals("")) {
@@ -134,10 +136,9 @@ public class EditRecipeActivity extends Activity {
                         Toast.makeText(this, R.string.add_recipe_confirmation, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(this, MainActivity.class));
                     } else {
-                        Recipe r = Recipe.findRecipeByName(recipes, editedRecipe.name);
+                        Recipe r = Recipe.findRecipeById(recipes, editedRecipe.uid);
                         recipes.set(recipes.indexOf(r), newRecipe);
                         Toast.makeText(this, R.string.edit_recipe_confirmation, Toast.LENGTH_SHORT).show();
-
                         Intent i = new Intent(this, RecipeViewActivity.class);
                         i.putExtra(MainActivity.MainActivityFragment.RECIPE_NAME_PRESSED, newRecipe.toBundle());
                         startActivity(i);

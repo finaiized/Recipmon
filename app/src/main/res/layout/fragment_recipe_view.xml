@@ -10,7 +10,7 @@
         android:layout_height="0dp"
         android:layout_weight="3">
 
-    <ImageView
+        <ImageView
             android:id="@+id/recipe_view_image"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
