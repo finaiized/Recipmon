@@ -3,38 +3,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1BBC9B"
     android:orientation="vertical">
+
 
     <ImageView
         android:id="@+id/add_recipe_image_view"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_height="250dp"
         android:contentDescription="@string/recipe_image_description"
         android:scaleType="centerCrop"
         android:src="@drawable/pink_cupcake" />
 
-
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
 
         <TextView
-            style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:gravity="center"
             android:text="@string/add_recipe_header_recipe"
-            android:textColor="#000000"
+            android:textAllCaps="true"
+            android:textColor="#ffffff"
             android:textStyle="bold" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:orientation="vertical">
 
             <EditText
@@ -42,34 +45,75 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:background="#D9E7F7"
                 android:hint="@string/add_recipe_name"
-                android:singleLine="true" />
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="#000"
+                android:textColorHint="#262B28" />
+
+            <LinearLayout
+                android:id="@+id/separator"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#2D3E50"
+                android:layout_below="@id/editTextRecipeName"
+                android:layout_marginTop="-12dp" />
 
             <EditText
                 android:id="@+id/editTextRecipeDescription"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/add_recipe_description" />
+                android:background="#D9E7F7"
+                android:hint="@string/add_recipe_description"
+                android:padding="10dp"
+                android:textColor="#000"
+                android:textColorHint="#262B28"
+                android:layout_below="@id/separator" />
+
+            <LinearLayout
+                android:id="@+id/separator2"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#2D3E50"
+                android:layout_below="@id/editTextRecipeDescription" />
+
+            <Button
+                android:id="@+id/add_image_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#D9E7F7"
+                android:textColor="#262B28"
+                android:paddingLeft="5dp"
+                android:drawableLeft="@drawable/ic_action_new_picture"
+                android:text="@string/add_recipe_add_image"
+                android:gravity="left|center_vertical"
+                android:layout_below="@id/separator2" />
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <Button
-            android:id="@+id/add_image_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:drawableLeft="@drawable/ic_action_new_picture"
-            android:text="@string/add_recipe_add_image" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
-            style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:text="@string/add_recipe_steps" />
-
+            android:gravity="center"
+            android:text="@string/add_recipe_steps"
+            android:textAllCaps="true"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>
