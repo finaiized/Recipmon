@@ -21,14 +21,21 @@ public class Recipe {
     public static final String bundleName = "name";
     public static final String bundleDescription = "description";
     public static final String bundleImage = "image";
+    public static final String bundleId = "id";
     public String name;
     public String description;
     public String image;
+    public String uid;
 
     public Recipe(String n, String d, String i) {
+        this(n, d, i, Long.toHexString(Double.doubleToLongBits(Math.random())));
+    }
+
+    public Recipe(String n, String d, String i, String id) {
         name = n;
         description = d;
         image = i;
+        uid = id != null ? id : Long.toHexString(Double.doubleToLongBits(Math.random()));
     }
 
 
@@ -51,7 +58,7 @@ public class Recipe {
         editor.apply();
     }
 
-    private static String readPreferencesAsJson(Activity a) {
+    public static String readPreferencesAsJson(Activity a) {
         SharedPreferences sp = a.getSharedPreferences(
                 a.getString(R.string.preference_key_recipe), Context.MODE_PRIVATE);
 
@@ -104,7 +111,7 @@ public class Recipe {
         writer.beginArray();
 
         for (Recipe r : recipes) {
-            addRecipe(r.name, r.description, r.image, writer);
+            addRecipe(r.name, r.description, r.image, r.uid, writer);
         }
 
         writer.endArray();
@@ -122,7 +129,7 @@ public class Recipe {
         }
     }
 
-    private static void addRecipe(String name, String description, String image, JsonWriter writer) throws IOException {
+    private static void addRecipe(String name, String description, String image, String id, JsonWriter writer) throws IOException {
         writer.beginObject();
         writer.name("name").value(name.trim());
         writer.name("description").value(description);
@@ -131,6 +138,7 @@ public class Recipe {
         } else {
             writer.name("image").value(image);
         }
+        writer.name("uid").value(id);
         writer.endObject();
     }
 
@@ -150,6 +158,7 @@ public class Recipe {
         String name = "";
         String description = "";
         String image = null;
+        String uid = "";
         reader.beginObject();
         while (reader.hasNext()) {
             String key = reader.nextName();
@@ -159,18 +168,20 @@ public class Recipe {
                 description = reader.nextString();
             } else if (key.equals("image") && reader.peek() != JsonToken.NULL) {
                 image = reader.nextString();
+            } else if (key.equals("uid")) {
+                uid = reader.nextString();
             } else {
                 reader.skipValue();
             }
         }
         reader.endObject();
 
-        return new Recipe(name, description, image);
+        return new Recipe(name, description, image, uid);
     }
 
-    public static Recipe findRecipeByName(List<Recipe> recipes, String name) {
+    public static Recipe findRecipeById(List<Recipe> recipes, String id) {
         for (Recipe r : recipes) {
-            if (r.name.equals(name)) {
+            if (r.uid.equals(id)) {
                 return r;
             }
         }
@@ -182,7 +193,20 @@ public class Recipe {
         b.putString(bundleName, name);
         b.putString(bundleDescription, description);
         b.putString(bundleImage, image);
+        b.putString(bundleId, uid);
         return b;
+    }
+
+    public static Recipe fromBundle(Bundle b) {
+        return new Recipe(b.getString(Recipe.bundleName),
+                b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage),
+                b.getString(Recipe.bundleId));
+
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }
 

@@ -2,8 +2,11 @@ package com.finaiized.recipmon.app;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +31,20 @@ public class MainActivity extends Activity {
             getFragmentManager().beginTransaction()
                     .add(R.id.container_main, new MainActivityFragment())
                     .commit();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_key_file), Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(getString(R.string.pref_key_first_launch), true)) {
+            try {
+                Recipe.writePreferences(this, Recipe.loadSampleData());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            sharedPreferences.edit().putBoolean(getString(R.string.pref_key_first_launch), false).apply();
         }
     }
 
@@ -71,12 +88,6 @@ public class MainActivity extends Activity {
         @Override
         public void onResume() {
             super.onResume();
-            /* Uncomment to load sample data for the first run
-            try {
-                Recipe.writePreferences(getActivity(), Recipe.loadSampleData());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
 
             final List<Recipe> recipeDataSourceList = new ArrayList<Recipe>();
 
@@ -88,19 +99,15 @@ public class MainActivity extends Activity {
             }
 
             ListView listView = (ListView) getActivity().findViewById(R.id.recipeList);
-            listView.setAdapter(new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1, Recipe.filterRecipeDataByName(recipeDataSourceList)));
+            listView.setAdapter(new ArrayAdapter<Recipe>(getActivity(),
+                    android.R.layout.simple_list_item_1, recipeDataSourceList));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String title = (String) adapterView.getItemAtPosition(i);
-                    Recipe recipe = Recipe.findRecipeByName(recipeDataSourceList, title);
-
-                    if (recipe != null) {
-                        Intent intent = new Intent(getActivity(), RecipeViewActivity.class);
-                        intent.putExtra(RECIPE_NAME_PRESSED, recipe.toBundle());
-                        startActivity(intent);
-                    }
+                    Recipe recipe = (Recipe) adapterView.getItemAtPosition(i);
+                    Intent intent = new Intent(getActivity(), RecipeViewActivity.class);
+                    intent.putExtra(RECIPE_NAME_PRESSED, recipe.toBundle());
+                    startActivity(intent);
                 }
             });
         }
