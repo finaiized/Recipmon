@@ -18,14 +18,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -128,7 +129,21 @@ public class EditRecipeActivity extends Activity {
                         recipeImagePath = editedPhotoUri;
                     }
                     newRecipe.image = recipeImagePath;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+                List<String> steps = new ArrayList<String>();
+                LinearLayout stepView = (LinearLayout) findViewById(R.id.edit_view_steps);
+                for (int i = 0; i < stepView.getChildCount(); i++) {
+                    View stepChild = stepView.getChildAt(i);
+                    if (stepChild instanceof EditText) {
+                        steps.add(((EditText) stepChild).getText().toString());
+                    }
+                }
+                newRecipe.steps = steps.toArray(new String[steps.size()]);
+
+                try {
                     List<Recipe> recipes = Recipe.readPreferencesAsList(this);
                     if (!isEditing) {
                         recipes.add(newRecipe);
@@ -253,11 +268,22 @@ public class EditRecipeActivity extends Activity {
             if (editedRecipe != null) {
                 EditText name = (EditText) view.findViewById(R.id.editTextRecipeName);
                 name.setText(editedRecipe.name);
+
                 EditText description = (EditText) view.findViewById(R.id.editTextRecipeDescription);
                 description.setText(editedRecipe.description);
+
                 if (editedRecipe.image != null) {
                     iv.setImageBitmap(BitmapFactory.decodeFile(editedRecipe.image));
                 }
+
+                LinearLayout stepView = (LinearLayout) view.findViewById(R.id.edit_view_steps);
+                for (String step : editedRecipe.steps) {
+                    EditText stepText = ((EditText) inflater.inflate(R.layout.edit_step_template, stepView, false));
+                    stepText.setText(step);
+                    stepView.addView(stepText);
+                }
+                // Add a step view as a placeholder for the next step
+                stepView.addView(inflater.inflate(R.layout.edit_step_template, stepView, false));
             }
             return view;
         }
