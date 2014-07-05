@@ -138,7 +138,10 @@ public class EditRecipeActivity extends Activity {
                 for (int i = 0; i < stepView.getChildCount(); i++) {
                     View stepChild = stepView.getChildAt(i);
                     if (stepChild instanceof EditText) {
-                        steps.add(((EditText) stepChild).getText().toString());
+                        String step = ((EditText) stepChild).getText().toString().trim();
+                        if (!step.isEmpty()) {
+                            steps.add(step);
+                        }
                     }
                 }
                 newRecipe.steps = steps.toArray(new String[steps.size()]);
@@ -282,9 +285,10 @@ public class EditRecipeActivity extends Activity {
                     stepText.setText(step);
                     stepView.addView(stepText);
                 }
-                // Add a step view as a placeholder for the next step
-                stepView.addView(inflater.inflate(R.layout.edit_step_template, stepView, false));
             }
+            LinearLayout stepView = (LinearLayout) view.findViewById(R.id.edit_view_steps);
+            // Add a step view as a placeholder for the next step
+            stepView.addView(inflater.inflate(R.layout.edit_step_template, stepView, false));
             return view;
         }
 
