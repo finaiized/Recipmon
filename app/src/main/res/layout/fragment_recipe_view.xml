@@ -1,95 +1,106 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.finaiized.recipmon.app.RecipeViewActivity.RecipeViewFragment">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="300dp">
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.finaiized.recipmon.app.RecipeViewActivity.RecipeViewFragment">
 
-        <ImageView
-            android:id="@+id/recipe_view_image"
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:contentDescription="@string/recipe_image_description"
-            android:scaleType="centerCrop"
-            android:src="@drawable/pink_cupcake" />
-    </RelativeLayout>
+            android:layout_height="300dp">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rectangle_header"
-        android:orientation="vertical">
+            <ImageView
+                android:id="@+id/recipe_view_image"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:contentDescription="@string/recipe_image_description"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pink_cupcake" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/recipe_view_name"
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:text="@string/add_recipe_name"
-            android:textStyle="bold"
-            android:textColor="#FFFAFA"
-            android:textSize="22sp"
-            android:gravity="top" />
+            android:background="@drawable/rectangle_header"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/recipe_description_label"
+            <TextView
+                android:id="@+id/recipe_view_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:text="@string/add_recipe_name"
+                android:textColor="#FFFAFA"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/recipe_description_label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_view_name"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/add_recipe_description"
+                android:textColor="#FFFAFA"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/anchor"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignTop="@id/recipe_view_name" />
+
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="@string/add_recipe_description"
-            android:textSize="16sp"
-            android:textColor="#FFFAFA"
-            android:layout_below="@id/recipe_view_name" />
+            android:background="@drawable/rectangle_subheader"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
 
-        <View
-            android:id="@+id/anchor"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_alignTop="@id/recipe_view_name" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="Serves: 5"
+                android:textColor="#DCEDED" />
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="Prep time: 5"
+                android:textColor="#DCEDED" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/rectangle_subheader"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="Cook time: 5"
+                android:textColor="#DCEDED" />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/recipe_view_steps"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Serves: 5"
-            android:textColor="#DCEDED"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp" />
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical"></LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Prep time: 5"
-            android:textColor="#DCEDED"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cook time: 5"
-            android:textColor="#DCEDED"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp" />
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
