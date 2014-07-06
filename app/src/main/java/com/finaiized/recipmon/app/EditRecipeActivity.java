@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -279,14 +280,39 @@ public class EditRecipeActivity extends Activity {
                     iv.setImageBitmap(BitmapFactory.decodeFile(editedRecipe.image));
                 }
 
-                LinearLayout stepView = (LinearLayout) view.findViewById(R.id.edit_view_steps);
-                for (String step : editedRecipe.steps) {
-                    EditText stepText = ((EditText) inflater.inflate(R.layout.edit_step_template, stepView, false));
-                    stepText.setText(step);
-                    stepView.addView(stepText);
-                }
+                final LinearLayout stepView = (LinearLayout) view.findViewById(R.id.edit_view_steps);
+                stepView.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+                    @Override
+                    public void onChildViewAdded(View parent, View child) {
+                        child.setOnKeyListener(new View.OnKeyListener() {
+                            @Override
+                            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                                    // Add a new EditText right below this one
+                                    int index = stepView.indexOfChild(view);
+                                    stepView.addView(getActivity().getLayoutInflater().inflate(R.layout.edit_step_template, stepView, false), index + 1);
+                                    return true;
+                                }
+                                return false;
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onChildViewRemoved(View parent, View child) {
+
+                    }
+                });
             }
             LinearLayout stepView = (LinearLayout) view.findViewById(R.id.edit_view_steps);
+
+            for (String step : editedRecipe.steps) {
+                EditText stepText = ((EditText) inflater.inflate(R.layout.edit_step_template, stepView, false));
+                stepText.setText(step);
+                stepView.addView(stepText);
+            }
+
             // Add a step view as a placeholder for the next step
             stepView.addView(inflater.inflate(R.layout.edit_step_template, stepView, false));
             return view;
