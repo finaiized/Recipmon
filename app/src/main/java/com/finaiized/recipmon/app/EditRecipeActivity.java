@@ -293,6 +293,14 @@ public class EditRecipeActivity extends Activity {
                                     int index = stepView.indexOfChild(view);
                                     stepView.addView(getActivity().getLayoutInflater().inflate(R.layout.edit_step_template, stepView, false), index + 1);
                                     return true;
+                                } else if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                                        (keyCode == KeyEvent.KEYCODE_DEL)) {
+                                    if (view instanceof EditText) {
+                                        EditText step = (EditText) view;
+                                        if (step.getText().toString().isEmpty()) {
+                                            stepView.removeView(view);
+                                        }
+                                    }
                                 }
                                 return false;
                             }
