@@ -22,20 +22,32 @@ public class Recipe {
     public static final String bundleDescription = "description";
     public static final String bundleImage = "image";
     public static final String bundleId = "id";
+    public static final String bundleSteps = "steps";
     public String name;
     public String description;
     public String image;
     public String uid;
+    public String[] steps;
 
     public Recipe(String n, String d, String i) {
-        this(n, d, i, Long.toHexString(Double.doubleToLongBits(Math.random())));
+        this(n, d, i, Long.toHexString(Double.doubleToLongBits(Math.random())), null);
     }
 
     public Recipe(String n, String d, String i, String id) {
-        name = n;
-        description = d;
-        image = i;
-        uid = id != null ? id : Long.toHexString(Double.doubleToLongBits(Math.random()));
+        this(n, d, i, id, null);
+    }
+
+
+    public Recipe(String n, String d, String i, String[] steps) {
+        this(n, d, i, Long.toHexString(Double.doubleToLongBits(Math.random())), steps);
+    }
+
+    public Recipe(String n, String d, String i, String id, String[] steps) {
+        this.name = n;
+        this.description = d;
+        this.image = i;
+        this.uid = id != null ? id : Long.toHexString(Double.doubleToLongBits(Math.random()));
+        this.steps = steps;
     }
 
 
@@ -99,19 +111,19 @@ public class Recipe {
     }
 
     public static String loadSampleData() throws IOException {
-        Recipe r1 = new Recipe("Sprinkle Cupcakes", "A treat for the youth among us!", null);
-        Recipe r2 = new Recipe("Chocolate Pie", "Stupendous amounts of chocolate wrapping the classic pie.", null);
+        Recipe r1 = new Recipe("Sprinkle Cupcakes", "A treat for the youth among us!", null, new String[]{"Preheat the oven", "Mix batter", "Bake 45 mins"});
+        Recipe r2 = new Recipe("Chocolate Pie", "Stupendous amounts of chocolate wrapping the classic pie.", null, new String[]{"Buy it from the store!"});
         List<Recipe> recipes = Arrays.asList(r1, r2);
         return createJsonRecipeStream(recipes);
     }
 
-    private static String createJsonRecipeStream(List<Recipe> recipes) throws IOException {
+    public static String createJsonRecipeStream(List<Recipe> recipes) throws IOException {
         StringWriter sw = new StringWriter();
         JsonWriter writer = new JsonWriter(sw);
         writer.beginArray();
 
         for (Recipe r : recipes) {
-            addRecipe(r.name, r.description, r.image, r.uid, writer);
+            addRecipe(r.name, r.description, r.image, r.uid, r.steps, writer);
         }
 
         writer.endArray();
@@ -119,7 +131,7 @@ public class Recipe {
         return sw.toString();
     }
 
-    private static List<Recipe> readJsonRecipeStream(String s) throws IOException {
+    public static List<Recipe> readJsonRecipeStream(String s) throws IOException {
         JsonReader reader = new JsonReader(new StringReader(s));
 
         try {
@@ -129,7 +141,7 @@ public class Recipe {
         }
     }
 
-    private static void addRecipe(String name, String description, String image, String id, JsonWriter writer) throws IOException {
+    private static void addRecipe(String name, String description, String image, String id, String[] steps, JsonWriter writer) throws IOException {
         writer.beginObject();
         writer.name("name").value(name.trim());
         writer.name("description").value(description);
@@ -139,6 +151,13 @@ public class Recipe {
             writer.name("image").value(image);
         }
         writer.name("uid").value(id);
+        writer.name("steps");
+        writer.beginArray();
+        for (String s : steps) {
+            writer.value(s);
+        }
+
+        writer.endArray();
         writer.endObject();
     }
 
@@ -159,6 +178,8 @@ public class Recipe {
         String description = "";
         String image = null;
         String uid = "";
+        List<String> steps = new ArrayList<String>();
+
         reader.beginObject();
         while (reader.hasNext()) {
             String key = reader.nextName();
@@ -170,13 +191,19 @@ public class Recipe {
                 image = reader.nextString();
             } else if (key.equals("uid")) {
                 uid = reader.nextString();
+            } else if (key.equals("steps")) {
+                reader.beginArray();
+                while (reader.hasNext()) {
+                    steps.add(reader.nextString());
+                }
+                reader.endArray();
             } else {
                 reader.skipValue();
             }
         }
         reader.endObject();
 
-        return new Recipe(name, description, image, uid);
+        return new Recipe(name, description, image, uid, steps.toArray(new String[steps.size()]));
     }
 
     public static Recipe findRecipeById(List<Recipe> recipes, String id) {
@@ -188,25 +215,41 @@ public class Recipe {
         return null;
     }
 
+    public static Recipe fromBundle(Bundle b) {
+        return new Recipe(b.getString(Recipe.bundleName),
+                b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage),
+                b.getString(Recipe.bundleId), b.getStringArray(bundleSteps));
+
+    }
+
     public Bundle toBundle() {
         Bundle b = new Bundle();
         b.putString(bundleName, name);
         b.putString(bundleDescription, description);
         b.putString(bundleImage, image);
         b.putString(bundleId, uid);
+        b.putStringArray(bundleSteps, steps);
         return b;
-    }
-
-    public static Recipe fromBundle(Bundle b) {
-        return new Recipe(b.getString(Recipe.bundleName),
-                b.getString(Recipe.bundleDescription), b.getString(Recipe.bundleImage),
-                b.getString(Recipe.bundleId));
-
     }
 
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public String toStringDebug() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n").append("Name: ").append(name).append("\n");
+        sb.append("Description: ").append(description).append("\n");
+        sb.append("Image uri: ").append(image).append("\n");
+        sb.append("UID: ").append(uid).append("\n");
+        sb.append("Steps: ").append("\n");
+        for (int i = 0; i < steps.length; i++) {
+            sb.append("    ").append(i + 1).append(". ").append(steps[i]).append("\n");
+        }
+
+        return sb.toString();
     }
 }
 

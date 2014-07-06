@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,9 +98,7 @@ public class RecipeViewActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
+
     public static class RecipeViewFragment extends Fragment {
 
         @Override
@@ -107,23 +106,31 @@ public class RecipeViewActivity extends Activity {
                                  Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
 
-            View name = inflater.inflate(R.layout.fragment_recipe_view, container, false);
+            View view = inflater.inflate(R.layout.fragment_recipe_view, container, false);
 
-            TextView tv = ((TextView) name.findViewById(R.id.recipe_view_name));
+            TextView tv = ((TextView) view.findViewById(R.id.recipe_view_name));
             tv.setText(currentRecipe.name);
             tv.setSelected(true); // enables ellipsize: marquee
 
-            TextView description = ((TextView) name.findViewById(R.id.recipe_description_label));
+            TextView description = ((TextView) view.findViewById(R.id.recipe_description_label));
             description.setText(currentRecipe.description);
 
-            ImageView image = ((ImageView) name.findViewById(R.id.recipe_view_image));
+            ImageView image = ((ImageView) view.findViewById(R.id.recipe_view_image));
             image.setImageResource(R.drawable.pink_cupcake);
             if (currentRecipe.image != null) {
                 image.setImageBitmap(BitmapFactory.decodeFile(currentRecipe.image));
             }
 
+            LinearLayout stepView = (LinearLayout) view.findViewById(R.id.recipe_view_steps);
+
+            for (String step : currentRecipe.steps) {
+                TextView stepTemplate = (TextView) inflater.inflate(R.layout.view_step_template, stepView, false);
+                stepTemplate.setText(step);
+                stepView.addView(stepTemplate);
+            }
+
             getActivity().getActionBar().setTitle(currentRecipe.name);
-            return name;
+            return view;
 
         }
     }

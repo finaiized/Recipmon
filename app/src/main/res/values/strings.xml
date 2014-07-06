@@ -30,5 +30,6 @@
     <string name="recipe_image_description">Recipe image</string>
     <string name="action_edit">Edit Recipe</string>
     <string name="edit_recipe_confirmation">Recipe edited</string>
+    <string name="edit_step_next_step_hint">Next step</string>
 
 </resources>

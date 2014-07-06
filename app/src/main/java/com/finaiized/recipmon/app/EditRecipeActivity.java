@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,14 +19,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -128,7 +130,24 @@ public class EditRecipeActivity extends Activity {
                         recipeImagePath = editedPhotoUri;
                     }
                     newRecipe.image = recipeImagePath;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+                List<String> steps = new ArrayList<String>();
+                LinearLayout stepView = (LinearLayout) findViewById(R.id.edit_view_steps);
+                for (int i = 0; i < stepView.getChildCount(); i++) {
+                    View stepChild = stepView.getChildAt(i);
+                    if (stepChild instanceof EditText) {
+                        String step = ((EditText) stepChild).getText().toString().trim();
+                        if (!step.isEmpty()) {
+                            steps.add(step);
+                        }
+                    }
+                }
+                newRecipe.steps = steps.toArray(new String[steps.size()]);
+
+                try {
                     List<Recipe> recipes = Recipe.readPreferencesAsList(this);
                     if (!isEditing) {
                         recipes.add(newRecipe);
@@ -250,15 +269,76 @@ public class EditRecipeActivity extends Activity {
             ImageView iv = (ImageView) view.findViewById(R.id.add_recipe_image_view);
             iv.setImageResource(R.drawable.pink_cupcake);
 
+            final LinearLayout stepView = (LinearLayout) view.findViewById(R.id.edit_view_steps);
+            stepView.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+                @Override
+                public void onChildViewAdded(View parent, View child) {
+                    child.setOnKeyListener(new View.OnKeyListener() {
+                        @Override
+                        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                            if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                                // Add a new EditText right below this one unless one already exists or this one is empty
+                                int index = stepView.indexOfChild(view);
+                                EditText et = (EditText) stepView.getChildAt(index + 1);
+                                if ((et == null || (!(et.getText().toString().trim().isEmpty()))) &&
+                                        !((EditText) view).getText().toString().trim().isEmpty()) {
+                                    stepView.addView(getActivity().getLayoutInflater().inflate(R.layout.edit_step_template, stepView, false), index + 1);
+                                    stepView.getChildAt(index + 1).requestFocus();
+                                } else {
+                                    EditText v = (EditText) stepView.getChildAt(index + 1);
+                                    if (v != null) {
+                                        v.requestFocus();
+                                        v.setSelection(v.getText().length());
+                                    }
+                                }
+                                return true;
+                            } else if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                                    (keyCode == KeyEvent.KEYCODE_DEL)) {
+                                if (view instanceof EditText) {
+                                    EditText step = (EditText) view;
+                                    if (step.getText().toString().isEmpty()) {
+                                        int index = stepView.indexOfChild(view);
+                                        stepView.removeView(view);
+                                        EditText et = (EditText) stepView.getChildAt(index - 1);
+                                        if (et != null) {
+                                            et.requestFocus();
+                                            et.setSelection(et.getText().length());
+                                        }
+                                    }
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                }
+
+                @Override
+                public void onChildViewRemoved(View parent, View child) {
+
+                }
+            });
+
             if (editedRecipe != null) {
                 EditText name = (EditText) view.findViewById(R.id.editTextRecipeName);
                 name.setText(editedRecipe.name);
+
                 EditText description = (EditText) view.findViewById(R.id.editTextRecipeDescription);
                 description.setText(editedRecipe.description);
+
                 if (editedRecipe.image != null) {
                     iv.setImageBitmap(BitmapFactory.decodeFile(editedRecipe.image));
                 }
+
+                for (String step : editedRecipe.steps) {
+                    EditText stepText = ((EditText) inflater.inflate(R.layout.edit_step_template, stepView, false));
+                    stepText.setText(step);
+                    stepView.addView(stepText);
+                }
             }
+
+            // Add a step view as a placeholder for the next step
+            stepView.addView(inflater.inflate(R.layout.edit_step_template, stepView, false));
             return view;
         }
 
