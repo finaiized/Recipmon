@@ -289,9 +289,13 @@ public class EditRecipeActivity extends Activity {
                             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                                 if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
                                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                                    // Add a new EditText right below this one
+                                    // Add a new EditText right below this one unless one already exists or this one is empty
                                     int index = stepView.indexOfChild(view);
-                                    stepView.addView(getActivity().getLayoutInflater().inflate(R.layout.edit_step_template, stepView, false), index + 1);
+                                    EditText et = (EditText) stepView.getChildAt(index + 1);
+                                    if ((et == null || (!(et.getText().toString().trim().isEmpty()))) &&
+                                            !((EditText) view).getText().toString().isEmpty()) {
+                                        stepView.addView(getActivity().getLayoutInflater().inflate(R.layout.edit_step_template, stepView, false), index + 1);
+                                    }
                                     return true;
                                 } else if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
                                         (keyCode == KeyEvent.KEYCODE_DEL)) {
