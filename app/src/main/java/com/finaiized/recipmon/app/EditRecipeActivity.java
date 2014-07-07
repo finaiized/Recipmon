@@ -299,6 +299,7 @@ public class EditRecipeActivity extends Activity {
                                     EditText step = (EditText) view;
                                     if (step.getText().toString().isEmpty()) {
                                         int index = stepView.indexOfChild(view);
+                                        if (index == 0) return true;
                                         stepView.removeView(view);
                                         EditText et = (EditText) stepView.getChildAt(index - 1);
                                         if (et != null) {
@@ -307,6 +308,7 @@ public class EditRecipeActivity extends Activity {
                                         }
                                     }
                                 }
+                                return false;
                             }
                             return false;
                         }
