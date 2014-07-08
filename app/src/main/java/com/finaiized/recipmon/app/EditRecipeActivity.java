@@ -113,19 +113,11 @@ public class EditRecipeActivity extends Activity {
                 String recipeImagePath;
 
                 try {
-                    // Has a new image been created or loaded?
-                    if (photoUri != null || loadedImage != null) {
-                        // Remove the old image
-                        if (isEditing && editedPhotoUri != null) {
-                            File f = new File(editedPhotoUri);
-                            f.delete();
+                    if (newImageCreatedOrLoaded()) {
+                        if (oldImageExists()) {
+                            new File(editedPhotoUri).delete();
                         }
-                        // Assign path based on whether the image was chosen or taken
-                        if (loadedImage != null) {
-                            recipeImagePath = saveSelectedImage(loadedImage);
-                        } else {
-                            recipeImagePath = photoUri;
-                        }
+                        recipeImagePath = imageWasChosen() ? saveImage(loadedImage) : photoUri;
                     } else {
                         recipeImagePath = editedPhotoUri;
                     }
@@ -157,6 +149,7 @@ public class EditRecipeActivity extends Activity {
                         Recipe r = Recipe.findRecipeById(recipes, editedRecipe.uid);
                         recipes.set(recipes.indexOf(r), newRecipe);
                         Toast.makeText(this, R.string.edit_recipe_confirmation, Toast.LENGTH_SHORT).show();
+
                         Intent i = new Intent(this, RecipeViewActivity.class);
                         i.putExtra(MainActivity.MainActivityFragment.RECIPE_NAME_PRESSED, newRecipe.toBundle());
                         startActivity(i);
@@ -172,6 +165,18 @@ public class EditRecipeActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean imageWasChosen() {
+        return loadedImage != null;
+    }
+
+    private boolean oldImageExists() {
+        return isEditing && editedPhotoUri != null;
+    }
+
+    private boolean newImageCreatedOrLoaded() {
+        return photoUri != null || loadedImage != null;
+    }
+
     private File createLocalImageFile() {
         // From http://developer.android.com/training/camera/photobasics.html
         // Create an image file name
@@ -183,7 +188,7 @@ public class EditRecipeActivity extends Activity {
         return file;
     }
 
-    private String saveSelectedImage(Bitmap bmp) throws IOException {
+    private String saveImage(Bitmap bmp) throws IOException {
 
         FileOutputStream out;
         File imgFile = createLocalImageFile();
@@ -232,8 +237,7 @@ public class EditRecipeActivity extends Activity {
                     // Remove previous data
                     loadedImage = null;
                     if (prevPhotoUri != null) {
-                        File f = new File(prevPhotoUri);
-                        f.delete();
+                        new File(prevPhotoUri).delete();
                     }
 
                     // Image from the gallery
@@ -257,8 +261,7 @@ public class EditRecipeActivity extends Activity {
                     }
                 } else {
                     // If the request fails, undo createLocalImageFile()
-                    File f = new File(photoUri);
-                    f.delete();
+                    new File(photoUri).delete();
                     photoUri = null;
                 }
             }
