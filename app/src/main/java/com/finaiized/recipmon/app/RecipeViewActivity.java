@@ -123,9 +123,14 @@ public class RecipeViewActivity extends Activity {
 
             LinearLayout stepView = (LinearLayout) view.findViewById(R.id.recipe_view_steps);
 
-            for (String step : currentRecipe.steps) {
-                TextView stepTemplate = (TextView) inflater.inflate(R.layout.view_step_template, stepView, false);
-                stepTemplate.setText(step);
+            String[] steps = currentRecipe.steps;
+            for (int i = 0; i < steps.length; i++) {
+                String step = steps[i];
+                LinearLayout stepTemplate = (LinearLayout) inflater.inflate(R.layout.view_step_template, stepView, false);
+                TextView stepText = (TextView) stepTemplate.findViewById(R.id.view_step_text);
+                stepText.setText(step);
+                TextView stepNumber = (TextView) stepTemplate.findViewById(R.id.view_step_number);
+                stepNumber.setText(String.format("%d.", i + 1));
                 stepView.addView(stepTemplate);
             }
 
