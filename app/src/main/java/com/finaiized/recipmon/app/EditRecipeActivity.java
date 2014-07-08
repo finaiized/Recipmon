@@ -227,32 +227,39 @@ public class EditRecipeActivity extends Activity {
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
 
-            if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
-                // Remove previous data
-                loadedImage = null;
-                if (prevPhotoUri != null) {
-                    File f = new File(prevPhotoUri);
-                    f.delete();
-                }
-
-                // Image from the gallery
-                if (data != null) {
-                    // Show - but don't save a copy of - the selected image
-                    Uri img = data.getData();
-                    try {
-                        loadedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), img);
-                        ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
-                        iv.setImageBitmap(loadedImage);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            if (requestCode == PICK_IMAGE_REQUEST) {
+                if (resultCode == RESULT_OK) {
+                    // Remove previous data
+                    loadedImage = null;
+                    if (prevPhotoUri != null) {
+                        File f = new File(prevPhotoUri);
+                        f.delete();
                     }
 
+                    // Image from the gallery
+                    if (data != null) {
+                        // Show - but don't save a copy of - the selected image
+                        Uri img = data.getData();
+                        try {
+                            loadedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), img);
+                            ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
+                            iv.setImageBitmap(loadedImage);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        // Image from camera
+                        ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
+                        Bitmap bmp = BitmapFactory.decodeFile(photoUri);
+                        iv.setImageBitmap(bmp);
+                        prevPhotoUri = photoUri;
+                    }
                 } else {
-                    // Image from camera
-                    ImageView iv = (ImageView) getActivity().findViewById(R.id.add_recipe_image_view);
-                    Bitmap bmp = BitmapFactory.decodeFile(photoUri);
-                    iv.setImageBitmap(bmp);
-                    prevPhotoUri = photoUri;
+                    // If the request fails, undo createLocalImageFile()
+                    File f = new File(photoUri);
+                    f.delete();
+                    photoUri = null;
                 }
             }
         }
