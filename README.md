@@ -3,5 +3,7 @@ Recipmon
 
 An Android cookbook for storing recipes.
 
+Recipes can be added and saved with an image and an arbitrary number of steps.
 
-![Viewing recipe](http://i.imgur.com/TgR4hsP.png) ![Editing recipe](http://i.imgur.com/OUEuawe.png)
+
+![Recipmon](http://i.imgur.com/VYc5Yzc.jpg)
